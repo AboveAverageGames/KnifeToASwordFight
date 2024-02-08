@@ -29,6 +29,12 @@ public class PlayerController : MonoBehaviour
 
         //Applies the movement to the player keeping track of the world space and time
         transform.Translate(movement * speed * Time.deltaTime, Space.World);
+
+        //Rotating player towards direction, In a if statement so the rotation doesnt RESET when there is no movement
+        if (movement != Vector3.zero) {
+        //Rotates the player towards the direction, the number at the end controls the SPEED of the rotation
+         transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(movement), 1000f * Time.deltaTime);
+        }
     }
 
     // Update is called once per frame
