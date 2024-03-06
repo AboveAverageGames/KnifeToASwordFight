@@ -287,6 +287,7 @@ Transform:
   - {fileID: 475188221}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
 --- !u!114 &118769753
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -306,6 +307,8 @@ MonoBehaviour:
   m_IgnoreFromBuild: 0
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffff
+=======
+>>>>>>> parent of 89fba69 (Coin Mechanics Furthered)
 --- !u!1 &180079616
 GameObject:
   m_ObjectHideFlags: 0
@@ -831,52 +834,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 251957544}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &269141575
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 269141577}
-  - component: {fileID: 269141576}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: GameController
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &269141576
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 269141575}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e162b99b3bdc175419a7067808e448fa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  totalCoinsCollected: 0
-  currentScore: 0
---- !u!4 &269141577
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 269141575}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.2908769, y: 6.2503166, z: 1.3685305}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &294684069
 GameObject:
   m_ObjectHideFlags: 0
@@ -2108,6 +2065,7 @@ CapsuleCollider:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
+<<<<<<< HEAD
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -2117,6 +2075,15 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+=======
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 80
+  m_CollisionDetection: 0
+>>>>>>> parent of 89fba69 (Coin Mechanics Furthered)
 --- !u!1 &583951173
 GameObject:
   m_ObjectHideFlags: 0
@@ -6125,6 +6092,7 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1869696655}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+<<<<<<< HEAD
 --- !u!1 &1898510307
 GameObject:
   m_ObjectHideFlags: 0
@@ -6230,6 +6198,8 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1898510307}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+=======
+>>>>>>> parent of 89fba69 (Coin Mechanics Furthered)
 --- !u!1 &1908773355
 GameObject:
   m_ObjectHideFlags: 0
@@ -7274,17 +7244,85 @@ Transform:
   - {fileID: 1250065039}
   m_Father: {fileID: 118769752}
   m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
+--- !u!1001 &7785717295026292778
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4418059000959008728, guid: a60616c86e3578c418f5edd280802ca3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 6.31
+      objectReference: {fileID: 0}
+    - target: {fileID: 4418059000959008728, guid: a60616c86e3578c418f5edd280802ca3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4418059000959008728, guid: a60616c86e3578c418f5edd280802ca3, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 3.91
+      objectReference: {fileID: 0}
+    - target: {fileID: 4418059000959008728, guid: a60616c86e3578c418f5edd280802ca3, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4418059000959008728, guid: a60616c86e3578c418f5edd280802ca3, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4418059000959008728, guid: a60616c86e3578c418f5edd280802ca3, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4418059000959008728, guid: a60616c86e3578c418f5edd280802ca3, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4418059000959008728, guid: a60616c86e3578c418f5edd280802ca3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4418059000959008728, guid: a60616c86e3578c418f5edd280802ca3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4418059000959008728, guid: a60616c86e3578c418f5edd280802ca3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4966529854271259331, guid: a60616c86e3578c418f5edd280802ca3, type: 3}
+      propertyPath: m_Name
+      value: Coin
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a60616c86e3578c418f5edd280802ca3, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+<<<<<<< HEAD
   - {fileID: 837056880}
   - {fileID: 269141577}
   - {fileID: 1661208011}
   - {fileID: 1082182881}
   - {fileID: 1278763240}
+=======
+  - {fileID: 1661208011}
+  - {fileID: 1082182881}
+  - {fileID: 1278763240}
+  - {fileID: 7785717295026292778}
+  - {fileID: 550534901}
+>>>>>>> parent of 89fba69 (Coin Mechanics Furthered)
   - {fileID: 1113357091}
   - {fileID: 1929050229}
   - {fileID: 118769752}
+<<<<<<< HEAD
   - {fileID: 899157057}
   - {fileID: 414124840}
+=======
+>>>>>>> parent of 89fba69 (Coin Mechanics Furthered)
