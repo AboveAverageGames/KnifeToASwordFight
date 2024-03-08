@@ -8,6 +8,7 @@ using UnityEngine.AI;
 public class EnemyAI : MonoBehaviour
 {
     private float enemyTimer;
+    private float enemyKilledCooldown;
 
     private bool hasBeenKilled;
 
@@ -69,7 +70,17 @@ public class EnemyAI : MonoBehaviour
                 break;
         }
 
+        if (gameManagerScript.doesPlayerHaveSword && currentState != enemyState.ReturnHome && enemyKilledCooldown <=0)
+        {
+            Debug.Log("THE PLAYER HAS A SWORD");
+            currentState = enemyState.Flee;
 
+        }
+
+
+        //Reduces enemy kill cooldown
+        enemyKilledCooldown -= Time.deltaTime;
+        Debug.Log(enemyKilledCooldown + "This is the time for enemy killdown countdown.");
     }
 
     void Chase()
@@ -124,7 +135,7 @@ public class EnemyAI : MonoBehaviour
             Vector3 newPos = transform.position + randomDirection;
 
         //Sets that new point for the agent to move to
-            agent.SetDestination(newPos);
+            agent.SetDestination(randomDirection);
 
 
 
@@ -136,6 +147,7 @@ public class EnemyAI : MonoBehaviour
 
     void ReturnHome()
     {
+        enemyKilledCooldown = 20;
         agent.SetDestination(homeLocation.position);
         //checks if the AI has made it back to home
         if (Vector3.Distance(transform.position, homeLocation.position) <= 1 && enemyTimer > 0)
