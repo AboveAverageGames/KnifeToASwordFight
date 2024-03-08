@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     public float speed;
     private Vector2 move;
 
+    public GameManagerScript gameManagerScript;
+
     public void OnMove(InputAction.CallbackContext context)
     {
         //This function is Invoked through the Input manager
@@ -19,6 +21,8 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Gets the game manager script access for the variable
+        gameManagerScript = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerScript>();
     }
 
     //Move Player

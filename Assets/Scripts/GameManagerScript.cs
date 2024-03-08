@@ -8,6 +8,8 @@ public class GameManagerScript : MonoBehaviour
     public int totalCoinsCollected;
     public int currentScore;
 
+    public bool doesPlayerHaveSword;
+
 
     // Start is called before the first frame update
     void Start()

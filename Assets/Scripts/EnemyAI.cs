@@ -9,14 +9,20 @@ public class EnemyAI : MonoBehaviour
 {
     private float enemyTimer;
 
+    private bool hasBeenKilled;
+
     private int currentWaypoint = 0;
 
     public NavMeshAgent agent;
 
     public Transform player;
+    public GameManagerScript gameManagerScript;
 
     public Transform [] scatterLocation;
     public Transform scatterLocationPlaceHolder;
+
+    public int fleeRadius;
+    public int vicinityRadiusToPlayer;
 
     public Transform homeLocation;
 
@@ -33,8 +39,12 @@ public class EnemyAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Gets and Assigns the game manager script to the variable
+        gameManagerScript = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerScript>();
+
+        //Starts the enemies in a state of scatter
         currentState = enemyState.Scatter;
-        enemyTimer = 30f;
+        enemyTimer = 7f;
     }
 
     // Update is called once per frame
@@ -59,13 +69,16 @@ public class EnemyAI : MonoBehaviour
                 break;
         }
 
+
     }
 
     void Chase()
     {
         agent.SetDestination(player.position);
 
+        //Reduces the time each second
         enemyTimer -=Time.deltaTime;
+        //When timer is done switch to scatter mode
         if (enemyTimer <= 0)
         { 
             currentState = enemyState.Scatter;
@@ -78,7 +91,7 @@ public class EnemyAI : MonoBehaviour
         //Changes destination to the current waypoint inside the scatter location Array
      agent.SetDestination(scatterLocation[currentWaypoint].position);
 
-        //Changes the waypoint when they reach one in the scatter phase. Adds +1 to the Array of waypoints once they reach one.
+        //Changes the waypoint when they reach one. Adds +1 to the Array of waypoints once they reach one, resets back to 0 and the end of the patrol.
         if (Vector3.Distance(transform.position, scatterLocation[currentWaypoint].position) < 1f)
         {
             if (currentWaypoint +1 != scatterLocation.Length)
@@ -94,6 +107,7 @@ public class EnemyAI : MonoBehaviour
 
         //Counting down the time spent in scatter phase
         enemyTimer -= Time.deltaTime;
+        //Once timer is done Switch to chase Mode
         if (enemyTimer <= 0)
         {
             currentState = enemyState.Chase;
@@ -103,28 +117,52 @@ public class EnemyAI : MonoBehaviour
 
     void Flee()
     {
-        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+        //Gets a random point within a random radius of a sphere inside the nav mesh
+            Vector3 randomDirection = Random.insideUnitSphere * fleeRadius;
 
-    
+        //Sets the random point based on where the Agent is
+            Vector3 newPos = transform.position + randomDirection;
 
-            Vector3 dirToPlayer = transform.position - player.transform.position;
-            Vector3 newPos = transform.position + dirToPlayer;
+        //Sets that new point for the agent to move to
             agent.SetDestination(newPos);
 
-        /*Tries to detect where the player is in the game world and run away from them.
-        
-        */
+
+
+
+        /*
+     float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+         Vector3 dirToPlayer = transform.position - player.transform.position */
     }
 
     void ReturnHome()
     {
         agent.SetDestination(homeLocation.position);
-
-        //checks if the AI has made it back to home, and then returns to chasing the player for 20s.
-        if (transform.position.z == homeLocation.position.z)
+        //checks if the AI has made it back to home
+        if (Vector3.Distance(transform.position, homeLocation.position) <= 1 && enemyTimer > 0)
         {
-            currentState = enemyState.Chase;
-            enemyTimer = 20;
+            enemyTimer -= Time.deltaTime;
+            //Start the timer for once they are home
+        }
+        else if (enemyTimer <= 0)
+        {
+            //after reaching home Scatter
+            currentState = enemyState.Scatter;
+            enemyTimer = 7;
+            hasBeenKilled = false;
         }
     }
-}
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player") && gameManagerScript.doesPlayerHaveSword)
+        {
+            enemyTimer = 5.0f;
+            hasBeenKilled = true;
+            currentState = enemyState.ReturnHome;
+        }
+        else
+        { 
+                Debug.Log("Collision with player without sword");
+            }
+        }
+    }
