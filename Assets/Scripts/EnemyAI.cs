@@ -77,10 +77,11 @@ public class EnemyAI : MonoBehaviour
 
         }
 
-
         //Reduces enemy kill cooldown
-        enemyKilledCooldown -= Time.deltaTime;
-        Debug.Log(enemyKilledCooldown + "This is the time for enemy killdown countdown.");
+        if (enemyKilledCooldown > 0)
+        {
+            enemyKilledCooldown -= Time.deltaTime;
+        }
     }
 
     void Chase()
@@ -137,7 +138,11 @@ public class EnemyAI : MonoBehaviour
         //Sets that new point for the agent to move to
             agent.SetDestination(randomDirection);
 
-
+        //Once the player no longer has the sword power up resume chasing
+        if (gameManagerScript.doesPlayerHaveSword == false)
+        {
+            currentState = enemyState.Chase;
+        }
 
 
         /*

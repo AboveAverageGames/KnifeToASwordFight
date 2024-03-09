@@ -9,6 +9,9 @@ public class PlayerController : MonoBehaviour
     public float speed;
     private Vector2 move;
 
+    private float swordPowerUpTimer = 10f;
+
+
     public GameManagerScript gameManagerScript;
 
     public void OnMove(InputAction.CallbackContext context)
@@ -41,10 +44,26 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void PowerUpTimer()
+    {
+    swordPowerUpTimer -=Time.deltaTime;
+        Debug.Log("Sword power up timer is " + swordPowerUpTimer);
+
+        if (swordPowerUpTimer <= 0)
+        {
+            gameManagerScript.doesPlayerHaveSword = false;
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
         //Calls the function to move the player
         MovePlayer();
+
+        if (gameManagerScript.doesPlayerHaveSword)
+        {
+            PowerUpTimer();
+        }
     }
 }
