@@ -66,4 +66,15 @@ public class PlayerController : MonoBehaviour
             PowerUpTimer();
         }
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy") && gameManagerScript.doesPlayerHaveSword == false)
+        {
+            Destroy(gameObject);
+            Debug.Log("You have died");
+        }
+
+    }
+
 }

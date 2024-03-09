@@ -20,7 +20,6 @@ public class EnemyAI : MonoBehaviour
     public GameManagerScript gameManagerScript;
 
     public Transform [] scatterLocation;
-    public Transform scatterLocationPlaceHolder;
 
     public int fleeRadius;
     public int vicinityRadiusToPlayer;
