@@ -17,6 +17,8 @@ public class EnemyAI : MonoBehaviour
     public NavMeshAgent agent;
 
     public Transform player;
+    public Transform chasePoint; //ChasePoint that is different for each goblin.
+
     public GameManagerScript gameManagerScript;
 
     public Transform [] scatterLocation;
@@ -25,6 +27,9 @@ public class EnemyAI : MonoBehaviour
     public int vicinityRadiusToPlayer;
 
     public Transform homeLocation;
+
+    //Testing if chase point is on the nav mesh
+    NavMeshHit hit;
 
     private enemyState currentState;
     private enum enemyState
@@ -85,10 +90,28 @@ public class EnemyAI : MonoBehaviour
 
     void Chase()
     {
-        agent.SetDestination(player.position);
+        //Checking if the chase point is on the navmesh
+        NavMesh.SamplePosition(chasePoint.position, out NavMeshHit hit, 1, NavMesh.AllAreas);
 
-        //Reduces the time each second
-        enemyTimer -=Time.deltaTime;
+        //Checks if chase point is on the nav mesh
+        //If it is not it will switch to chasing the playeras position
+        //It will also switch to the players position if the distance between the player and the enemy is below a certain range
+        if (hit.hit == false || (Vector3.Distance(transform.position, player.position) <= 7))
+        {
+            agent.SetDestination(player.position);
+            Debug.Log("Chasing Player positon");
+        }
+        //If the ball is on the navmesh it will chase the ball (Seeming like it is cutting off the player)
+        else 
+        { 
+            agent.SetDestination(chasePoint.position);
+            Debug.Log("Chasing Pink ball position");
+        } 
+            
+
+
+            //Reduces the time each second
+            enemyTimer -=Time.deltaTime;
         //When timer is done switch to scatter mode
         if (enemyTimer <= 0)
         { 
