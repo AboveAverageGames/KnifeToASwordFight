@@ -80,12 +80,7 @@ public class EnemyAI : MonoBehaviour
             currentState = enemyState.Flee;
 
         }
-
-        //Reduces enemy kill cooldown
-        if (enemyKilledCooldown > 0)
-        {
-            enemyKilledCooldown -= Time.deltaTime;
-        }
+        Debug.Log("Enemy timer currently is " + enemyTimer);
     }
 
     void Chase()
@@ -174,20 +169,18 @@ public class EnemyAI : MonoBehaviour
 
     void ReturnHome()
     {
-        enemyKilledCooldown = 20;
         agent.SetDestination(homeLocation.position);
         //checks if the AI has made it back to home
-        if (Vector3.Distance(transform.position, homeLocation.position) <= 1 && enemyTimer > 0)
+        if (Vector3.Distance(transform.position, homeLocation.position) <= 1 && gameManagerScript.doesPlayerHaveSword == false)
         {
-            enemyTimer -= Time.deltaTime;
-            //Start the timer for once they are home
+            currentState = enemyState.Chase;
+            enemyTimer = 20;
         }
-        else if (enemyTimer <= 0)
+        else if (gameManagerScript.doesPlayerHaveSword == false)
         {
             //after reaching home Scatter
-            currentState = enemyState.Scatter;
-            enemyTimer = 7;
-            hasBeenKilled = false;
+            currentState = enemyState.Chase;
+            enemyTimer = 20;
         }
     }
 
