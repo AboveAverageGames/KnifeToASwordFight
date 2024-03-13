@@ -10,8 +10,6 @@ public class EnemyAI : MonoBehaviour
     private float enemyTimer;
     private float enemyKilledCooldown;
 
-    private bool hasBeenKilled;
-
     private int currentWaypoint = 0;
 
     public NavMeshAgent agent;
@@ -74,13 +72,12 @@ public class EnemyAI : MonoBehaviour
                 break;
         }
 
+
+
         if (gameManagerScript.doesPlayerHaveSword && currentState != enemyState.ReturnHome && enemyKilledCooldown <=0)
         {
-            Debug.Log("THE PLAYER HAS A SWORD");
             currentState = enemyState.Flee;
-
         }
-        Debug.Log("Enemy timer currently is " + enemyTimer);
     }
 
     void Chase()
@@ -95,12 +92,14 @@ public class EnemyAI : MonoBehaviour
         {
             agent.SetDestination(player.position);
             Debug.Log("Chasing Player positon");
+            Debug.Log("Is the ball on the navmesh? " + hit.hit);
         }
         //If the ball is on the navmesh it will chase the ball (Seeming like it is cutting off the player)
         else 
         { 
             agent.SetDestination(chasePoint.position);
-            Debug.Log("Chasing Pink ball position");
+            Debug.Log("Chasing ball position");
+            Debug.Log("Is the ball on the navmesh? " + hit.hit);
         } 
             
 
@@ -159,6 +158,7 @@ public class EnemyAI : MonoBehaviour
         if (gameManagerScript.doesPlayerHaveSword == false)
         {
             currentState = enemyState.Chase;
+            enemyTimer = 20;
         }
 
 
@@ -189,7 +189,6 @@ public class EnemyAI : MonoBehaviour
         if (collision.gameObject.CompareTag("Player") && gameManagerScript.doesPlayerHaveSword)
         {
             enemyTimer = 5.0f;
-            hasBeenKilled = true;
             currentState = enemyState.ReturnHome;
         }
         else
