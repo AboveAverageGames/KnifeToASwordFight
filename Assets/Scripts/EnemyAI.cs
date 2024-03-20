@@ -8,7 +8,6 @@ using UnityEngine.AI;
 public class EnemyAI : MonoBehaviour
 {
     private float enemyTimer;
-    private float enemyKilledCooldown;
 
     private int currentWaypoint = 0;
 
@@ -74,7 +73,7 @@ public class EnemyAI : MonoBehaviour
 
 
 
-        if (gameManagerScript.doesPlayerHaveSword && currentState != enemyState.ReturnHome && enemyKilledCooldown <=0)
+        if (gameManagerScript.doesPlayerHaveSword && currentState != enemyState.ReturnHome)
         {
             currentState = enemyState.Flee;
         }
@@ -91,15 +90,11 @@ public class EnemyAI : MonoBehaviour
         if (hit.hit == false || (Vector3.Distance(transform.position, player.position) <= 7))
         {
             agent.SetDestination(player.position);
-            Debug.Log("Chasing Player positon");
-            Debug.Log("Is the ball on the navmesh? " + hit.hit);
         }
         //If the ball is on the navmesh it will chase the ball (Seeming like it is cutting off the player)
         else 
         { 
             agent.SetDestination(chasePoint.position);
-            Debug.Log("Chasing ball position");
-            Debug.Log("Is the ball on the navmesh? " + hit.hit);
         } 
             
 
@@ -152,7 +147,7 @@ public class EnemyAI : MonoBehaviour
             Vector3 newPos = transform.position + randomDirection;
 
         //Sets that new point for the agent to move to
-            agent.SetDestination(randomDirection);
+        agent.SetDestination(randomDirection);
 
         //Once the player no longer has the sword power up resume chasing
         if (gameManagerScript.doesPlayerHaveSword == false)

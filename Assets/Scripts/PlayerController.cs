@@ -10,6 +10,9 @@ public class PlayerController : MonoBehaviour
     private bool hasSwordAnimPlayed;
     private bool hasAttackAnimPlayed;
     private bool playerFrozen;
+    private bool IsPlayerDead;
+
+    private GameObject swordAttatchedToPlayer;
 
     public float speed;
     private Vector2 move;
@@ -30,6 +33,12 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        IsPlayerDead = false;
+
+        //Gets Sword object and disables it on start up
+        swordAttatchedToPlayer = GameObject.FindWithTag("SwordInHand");
+        swordAttatchedToPlayer.SetActive(false);
+
         //Gets the game manager script access for the variable
         gameManagerScript = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerScript>();
 
@@ -67,6 +76,9 @@ public class PlayerController : MonoBehaviour
 
         if (swordPowerUpTimer <= 0)
         {
+            //Takes the sword out of the players hand
+            swordAttatchedToPlayer.SetActive(false);
+
             gameManagerScript.doesPlayerHaveSword = false;
             hasSwordAnimPlayed = false;
         }
@@ -86,13 +98,25 @@ public class PlayerController : MonoBehaviour
             //Starts a timer for how long the player has the sword for
             PowerUpTimer();
 
+            //Checks if the animation for attacking has played, and if it has finished playing it switches back to the Idle / Running animation
+            if (animController.GetCurrentAnimatorStateInfo(0).IsName("Attack04_SwordAndShield") && animController.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.99)
+            {
+                Debug.Log("Animation DONE");
+                playerFrozen = false;
+                animController.SetBool("AttackAnimHasPlayed", true);
+            }
+
             //Checks if sword anim has played on pick up, if not it plays
             if (hasSwordAnimPlayed == false && gameManagerScript.doesPlayerHaveSword)
             {
                 playerFrozen = true;
                 animController.Play("LevelUp_Battle_SwordAndShield");
                 hasSwordAnimPlayed = true;
+
+                //Enables the sword in the players hand
+                swordAttatchedToPlayer.SetActive(true);
             }
+
             //Once animation is detected as finished, it will switch back into its transitionable states
             if (animController.GetCurrentAnimatorStateInfo(0).IsName("LevelUp_Battle_SwordAndShield") && animController.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.99 && hasSwordAnimPlayed == true)
             {
@@ -100,22 +124,24 @@ public class PlayerController : MonoBehaviour
                 playerFrozen = false;
             }
         }
-      
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Enemy") && gameManagerScript.doesPlayerHaveSword == false)
+        if (collision.gameObject.CompareTag("Enemy") && gameManagerScript.doesPlayerHaveSword == false && !IsPlayerDead)
         {
-            Destroy(gameObject);
-            Debug.Log("You have died");
+            animController.Play("Die01_SwordAndShield");
+            IsPlayerDead = true;
+            playerFrozen = true;
+            
         }
-        //EDIT THIS NEXT PLS. THIS IS FOR THE ANIMATION OF THE COLLISION WITH A SWORD WITH TTHE PLAYER
-        //if (collision.gameObject.CompareTag("Enemy") && gameManagerScript.doesPlayerHaveSword == true)
-       // {
-        //    animController.Play("Attack04_SwordAndShield");
-       //    Debug.Log("We Have collided with a sword");
-       // }
+
+        //Handles Animation if they collide with enemy and have sword
+        if (collision.gameObject.CompareTag("Enemy") && gameManagerScript.doesPlayerHaveSword == true && !IsPlayerDead)
+        {
+            animController.SetBool("AttackAnimHasPlayed", false);
+            animController.Play("Attack04_SwordAndShield");
+        }
 
     }
 

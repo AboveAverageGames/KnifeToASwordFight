@@ -24,7 +24,7 @@ public class GameManagerScript : MonoBehaviour
         //If statement to check if ALL THE COINS in the level have been collected
         if (totalCoinsCollected == numberOfCoins)
         {
-            Debug.Log("You got all the coins");
+
         }
         
     }
@@ -34,6 +34,6 @@ public class GameManagerScript : MonoBehaviour
     {
         //Updates the current score with the INT Points that is passed into the function
         currentScore = currentScore + (points);
-        Debug.Log("The current score is" +  currentScore + " The total coins collected is " + totalCoinsCollected);
+        
     }
 }
