@@ -87,7 +87,7 @@ public class EnemyAI : MonoBehaviour
         //Checks if chase point is on the nav mesh
         //If it is not it will switch to chasing the playeras position
         //It will also switch to the players position if the distance between the player and the enemy is below a certain range
-        if (hit.hit == false || (Vector3.Distance(transform.position, player.position) <= 7))
+        if (hit.hit == false || (Vector3.Distance(transform.position, player.position) <= 10))
         {
             agent.SetDestination(player.position);
         }
@@ -116,17 +116,9 @@ public class EnemyAI : MonoBehaviour
 
         //Changes the waypoint when they reach one. Adds +1 to the Array of waypoints once they reach one, resets back to 0 and the end of the patrol.
         if (Vector3.Distance(transform.position, scatterLocation[currentWaypoint].position) < 1f)
-        {
-            if (currentWaypoint +1 != scatterLocation.Length)
             {
-                currentWaypoint++;
+             currentWaypoint = currentWaypoint + 1 % scatterLocation.Length;
             }
-            else if (currentWaypoint +1 == scatterLocation.Length)
-            {
-                currentWaypoint = 0;
-            }
-        }
-
 
         //Counting down the time spent in scatter phase
         enemyTimer -= Time.deltaTime;
@@ -136,6 +128,22 @@ public class EnemyAI : MonoBehaviour
             currentState = enemyState.Chase;
             enemyTimer = 20;
         }
+
+
+
+        //Old code that wasnt based on the refactored code from previous proj
+        /*if (Vector3.Distance(transform.position, scatterLocation[currentWaypoint].position) < 1f)
+     {
+         if (currentWaypoint +1 != scatterLocation.Length)
+         {
+             currentWaypoint++;
+         }
+         else if (currentWaypoint +1 == scatterLocation.Length)
+         {
+             currentWaypoint = 0;
+         }
+     */
+
     }
 
     void Flee()
