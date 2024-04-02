@@ -9,6 +9,8 @@ public class EnemyAI : MonoBehaviour
 {
     private float enemyTimer;
 
+    private Animator animController;
+
     private int currentWaypoint = 0;
 
     public NavMeshAgent agent;
@@ -41,6 +43,9 @@ public class EnemyAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Gets Animator For Enemies
+        animController = GetComponentInChildren<Animator>();
+
         //Gets and Assigns the game manager script to the variable
         gameManagerScript = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerScript>();
 
@@ -71,11 +76,21 @@ public class EnemyAI : MonoBehaviour
                 break;
         }
 
-
-
+        //Makes the enemies flee if the player has a sword and they are not already at their home (after being Killed)
         if (gameManagerScript.doesPlayerHaveSword && currentState != enemyState.ReturnHome)
         {
             currentState = enemyState.Flee;
+        }
+
+
+        //HERE we check if the goblin is at home, since it is the only time they dont move, we set the anim to idle.
+        if (Vector3.Distance(transform.position, homeLocation.position) <= 0.5)
+        {
+            animController.SetBool("Home", true);
+        }
+        else
+        {
+            animController.SetBool("Home", false);
         }
     }
 
@@ -117,7 +132,7 @@ public class EnemyAI : MonoBehaviour
         //Changes the waypoint when they reach one. Adds +1 to the Array of waypoints once they reach one, resets back to 0 and the end of the patrol.
         if (Vector3.Distance(transform.position, scatterLocation[currentWaypoint].position) < 1f)
             {
-             currentWaypoint = currentWaypoint + 1 % scatterLocation.Length;
+             currentWaypoint = (currentWaypoint + 1) % scatterLocation.Length;
             }
 
         //Counting down the time spent in scatter phase
@@ -189,6 +204,7 @@ public class EnemyAI : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        //Checking if it colliding with the player and if they have a sword
         if (collision.gameObject.CompareTag("Player") && gameManagerScript.doesPlayerHaveSword)
         {
             enemyTimer = 5.0f;

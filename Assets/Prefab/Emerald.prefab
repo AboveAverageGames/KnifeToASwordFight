@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4755346936816852558}
   - component: {fileID: 7357357395336833668}
   m_Layer: 0
-  m_Name: 05_Vault_01_Emerald#1
+  m_Name: Emerald
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

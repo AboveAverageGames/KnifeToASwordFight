@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Coins : MonoBehaviour
+public class Collectibles : MonoBehaviour
 {
-    public int pointsItemIsWorth = 10;
+    public int pointsItemIsWorth;
 
     public GameManagerScript gameManagerScript;
 
