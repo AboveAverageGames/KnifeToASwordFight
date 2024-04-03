@@ -8,12 +8,17 @@ public class Collectibles : MonoBehaviour
 
     public GameManagerScript gameManagerScript;
 
+    public AudioManager audioManager;
+
 
 
     void Start()
     {
         //Assigns the GameManagerScript to this object so I can access it when needed
         gameManagerScript = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerScript>();
+
+        //Assings the Audio manager so I can access it
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
     }
 
 
@@ -22,6 +27,9 @@ public class Collectibles : MonoBehaviour
         //If Coin collides with player then it is destroyed + Updates the Score in the GameManagerScript
         if (collision.gameObject.CompareTag("Player"))
             {
+            //Plays SFX On collection
+            audioManager.PlaySFX(audioManager.coinCollection);
+
             gameManagerScript.totalCoinsCollected++;
             Destroy(gameObject);
             gameManagerScript.UpdateScore(pointsItemIsWorth);

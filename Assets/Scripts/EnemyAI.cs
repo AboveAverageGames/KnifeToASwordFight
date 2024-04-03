@@ -9,6 +9,8 @@ public class EnemyAI : MonoBehaviour
 {
     private float enemyTimer;
 
+    Vector3 randomDirection;
+
     private Animator animController;
 
     private int currentWaypoint = 0;
@@ -144,27 +146,13 @@ public class EnemyAI : MonoBehaviour
             enemyTimer = 20;
         }
 
-
-
-        //Old code that wasnt based on the refactored code from previous proj
-        /*if (Vector3.Distance(transform.position, scatterLocation[currentWaypoint].position) < 1f)
-     {
-         if (currentWaypoint +1 != scatterLocation.Length)
-         {
-             currentWaypoint++;
-         }
-         else if (currentWaypoint +1 == scatterLocation.Length)
-         {
-             currentWaypoint = 0;
-         }
-     */
-
     }
 
     void Flee()
     {
+
         //Gets a random point within a random radius of a sphere inside the nav mesh
-            Vector3 randomDirection = Random.insideUnitSphere * fleeRadius;
+            randomDirection = Random.insideUnitSphere * fleeRadius;
 
         //Sets the random point based on where the Agent is
             Vector3 newPos = transform.position + randomDirection;

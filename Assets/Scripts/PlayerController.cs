@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
     private bool playerFrozen;
     private bool IsPlayerDead;
 
+    AudioManager audioManager;
+
     private GameObject swordAttatchedToPlayer;
 
     public float speed;
@@ -41,6 +43,9 @@ public class PlayerController : MonoBehaviour
 
         //Gets the game manager script access for the variable
         gameManagerScript = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerScript>();
+
+        //Gets audio manager
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
 
         //Gets player animator
         animController = GetComponentInChildren<Animator>();
@@ -79,9 +84,16 @@ public class PlayerController : MonoBehaviour
             //Takes the sword out of the players hand
             swordAttatchedToPlayer.SetActive(false);
 
+            //Changes music back to original score
+            
+            audioManager.ChangeBGMusic(audioManager.backgroundMusic);
+            audioManager.PlaySFX(audioManager.powerdownSound);
+
             gameManagerScript.doesPlayerHaveSword = false;
             hasSwordAnimPlayed = false;
         }
+
+        swordPowerUpTimer = 10;
     }
 
     // Update is called once per frame
@@ -133,6 +145,8 @@ public class PlayerController : MonoBehaviour
             animController.Play("Die01_SwordAndShield");
             IsPlayerDead = true;
             playerFrozen = true;
+
+            audioManager.PlaySFX(audioManager.playerDeathSound);
             
         }
 
