@@ -91,9 +91,10 @@ public class PlayerController : MonoBehaviour
 
             gameManagerScript.doesPlayerHaveSword = false;
             hasSwordAnimPlayed = false;
+            swordPowerUpTimer = 10;
         }
 
-        swordPowerUpTimer = 10;
+        
     }
 
     // Update is called once per frame
