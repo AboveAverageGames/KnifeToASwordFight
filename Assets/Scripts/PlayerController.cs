@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
     private bool playerFrozen;
     private bool IsPlayerDead;
 
+
+
     AudioManager audioManager;
 
     private GameObject swordAttatchedToPlayer;
@@ -21,6 +23,7 @@ public class PlayerController : MonoBehaviour
 
     //Time he carries the sword for once picked up
     private float swordPowerUpTimer = 10f;
+    public PowerUpBar powerUpBar;
 
     //Accessing the game manager script
     public GameManagerScript gameManagerScript;
@@ -35,6 +38,12 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        //Getting access to power up slider
+        powerUpBar = GameObject.FindGameObjectWithTag("PowerUpBar").GetComponent<PowerUpBar>();
+        powerUpBar.SetMaxValue(swordPowerUpTimer);
+
+        //Makes sure player dead is set to false
         IsPlayerDead = false;
 
         //Gets Sword object and disables it on start up
@@ -46,6 +55,7 @@ public class PlayerController : MonoBehaviour
 
         //Gets audio manager
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+        audioManager.PlaySFX(audioManager.UISound);
 
         //Gets player animator
         animController = GetComponentInChildren<Animator>();
@@ -78,6 +88,7 @@ public class PlayerController : MonoBehaviour
     public void PowerUpTimer()
     {
     swordPowerUpTimer -=Time.deltaTime;
+    powerUpBar.SetCurrentValue(swordPowerUpTimer);
 
         if (swordPowerUpTimer <= 0)
         {

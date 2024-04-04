@@ -9,6 +9,7 @@ TagManager:
   - Sword
   - SwordInHand
   - Audio
+  - PowerUpBar
   layers:
   - Default
   - TransparentFX

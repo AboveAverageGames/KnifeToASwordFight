@@ -16,6 +16,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip coinCollection;
     public AudioClip powerupSound;
     public AudioClip powerdownSound;
+    public AudioClip UISound;
 
 
     //Plays the BG music on start up
