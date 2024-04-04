@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
 
         //Gets audio manager
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
-        audioManager.PlaySFX(audioManager.UISound);
+
 
         //Gets player animator
         animController = GetComponentInChildren<Animator>();
