@@ -1,3 +1,5 @@
+using Boxophobic.StyledGUI;
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -147,30 +149,52 @@ public class EnemyAI : MonoBehaviour
 
     }
 
+
+    bool RandomPoint(Vector3 center, float fleeRadius, out Vector3 result)
+    {
+        for (int i = 0; i < 30; i++)
+        {
+            Vector3 randomPoint = center + Random.insideUnitSphere * fleeRadius;
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(randomPoint, out hit, 0.5f, NavMesh.AllAreas))
+            {
+                result = hit.position;
+                return true;
+            }
+        }
+        result = Vector3.zero;
+        return false;
+    }
+
     void Flee()
     {
 
+        Vector3 point;
+        if (RandomPoint(transform.position, fleeRadius, out point))
+        {
+            Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f);
+            agent.SetDestination(point);
+        }
+
+
+        /*
         //Gets a random point within a random radius of a sphere inside the nav mesh
-            randomDirection = Random.insideUnitSphere * fleeRadius;
-
-        //Sets the random point based on where the Agent is
-            Vector3 newPos = transform.position + randomDirection;
-
+        randomDirection = transform.position + Random.insideUnitSphere * fleeRadius;
         //Sets that new point for the agent to move to
         agent.SetDestination(randomDirection);
+        */
 
         //Once the player no longer has the sword power up resume chasing
         if (gameManagerScript.doesPlayerHaveSword == false)
         {
             currentState = enemyState.Chase;
             enemyTimer = 20;
+  
         }
+        
 
-
-        /*
-     float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-         Vector3 dirToPlayer = transform.position - player.transform.position */
     }
+
 
     void ReturnHome()
     {
@@ -199,7 +223,6 @@ public class EnemyAI : MonoBehaviour
         }
         else
         { 
-                Debug.Log("Collision with player without sword");
             }
         }
     }

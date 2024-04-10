@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -10,7 +11,10 @@ public class PlayerController : MonoBehaviour
     private bool hasSwordAnimPlayed;
     private bool hasAttackAnimPlayed;
     private bool playerFrozen;
-    private bool IsPlayerDead;
+    public bool isPlayerDead;
+    public bool gameOver;
+
+    public GameObject pauseMenu;
 
 
 
@@ -21,12 +25,29 @@ public class PlayerController : MonoBehaviour
     public float speed;
     private Vector2 move;
 
+
     //Time he carries the sword for once picked up
     private float swordPowerUpTimer = 10f;
     public PowerUpBar powerUpBar;
 
     //Accessing the game manager script
     public GameManagerScript gameManagerScript;
+
+
+    // Pauses or Unpauses the game using the new input action
+    public void Pause(InputAction.CallbackContext context)
+    {
+        if (pauseMenu.activeSelf)
+        {
+            pauseMenu.SetActive(false);
+            Time.timeScale = 1f;
+        }
+        else
+        {
+            pauseMenu.SetActive(true);
+            Time.timeScale = 0f;
+        }    
+    }
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -39,12 +60,15 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
 
+        //Initalises the game being over as false
+        gameOver = false;
+
         //Getting access to power up slider
         powerUpBar = GameObject.FindGameObjectWithTag("PowerUpBar").GetComponent<PowerUpBar>();
         powerUpBar.SetMaxValue(swordPowerUpTimer);
 
         //Makes sure player dead is set to false
-        IsPlayerDead = false;
+        isPlayerDead = false;
 
         //Gets Sword object and disables it on start up
         swordAttatchedToPlayer = GameObject.FindWithTag("SwordInHand");
@@ -111,6 +135,12 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Checks if the animation for him laying down has played before sending a game over to the game manager script
+        if (animController.GetCurrentAnimatorStateInfo(0).IsName("Die01_SwordAndShield") && animController.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.99)
+        {
+            gameOver = true;
+        }
+
         //Calls the function to move the player
         if (!playerFrozen)
         {
@@ -125,7 +155,6 @@ public class PlayerController : MonoBehaviour
             //Checks if the animation for attacking has played, and if it has finished playing it switches back to the Idle / Running animation
             if (animController.GetCurrentAnimatorStateInfo(0).IsName("Attack04_SwordAndShield") && animController.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.99)
             {
-                Debug.Log("Animation DONE");
                 playerFrozen = false;
                 animController.SetBool("AttackAnimHasPlayed", true);
             }
@@ -148,22 +177,25 @@ public class PlayerController : MonoBehaviour
                 playerFrozen = false;
             }
         }
+
+
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Enemy") && gameManagerScript.doesPlayerHaveSword == false && !IsPlayerDead)
+        if (collision.gameObject.CompareTag("Enemy") && gameManagerScript.doesPlayerHaveSword == false && !isPlayerDead)
         {
             animController.Play("Die01_SwordAndShield");
-            IsPlayerDead = true;
+            isPlayerDead = true;
             playerFrozen = true;
-
             audioManager.PlaySFX(audioManager.playerDeathSound);
-            
+
+        
+
         }
 
         //Handles Animation if they collide with enemy and have sword
-        if (collision.gameObject.CompareTag("Enemy") && gameManagerScript.doesPlayerHaveSword == true && !IsPlayerDead)
+        if (collision.gameObject.CompareTag("Enemy") && gameManagerScript.doesPlayerHaveSword == true && !isPlayerDead)
         {
             animController.SetBool("AttackAnimHasPlayed", false);
             animController.Play("Attack04_SwordAndShield");

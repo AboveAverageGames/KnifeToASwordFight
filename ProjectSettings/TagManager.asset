@@ -10,6 +10,8 @@ TagManager:
   - SwordInHand
   - Audio
   - PowerUpBar
+  - GameOverScreen
+  - PauseScreen
   layers:
   - Default
   - TransparentFX

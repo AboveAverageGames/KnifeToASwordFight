@@ -425,6 +425,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioManager: {fileID: 0}
+  highScoreNumberText: {fileID: 2099307076}
 --- !u!1001 &135506842
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2767,6 +2768,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioManager: {fileID: 0}
+  highScoreNumberText: {fileID: 0}
 --- !u!1 &1881912692
 GameObject:
   m_ObjectHideFlags: 0
@@ -3517,6 +3519,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioManager: {fileID: 0}
+  highScoreNumberText: {fileID: 0}
 --- !u!1 &2099307074
 GameObject:
   m_ObjectHideFlags: 0
@@ -3574,7 +3577,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 12345
+  m_text: 1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 982f97f29cfe05a41ad16f5b6b8f4e17, type: 2}
   m_sharedMaterial: {fileID: -9102049103128608068, guid: 982f97f29cfe05a41ad16f5b6b8f4e17, type: 2}
