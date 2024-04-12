@@ -41,11 +41,14 @@ public class GameUI : MonoBehaviour
 
     public void NextLevel()
     {
+        //Increase difficulty here
+        PlayerPrefs.SetInt("CurrentLevel", PlayerPrefs.GetInt("CurrentLevel") +1);
+
         //Sets the current score saved to the current score achieved this level
         PlayerPrefs.SetInt("CurrentScoreSaved", gameManagerScript.currentScore);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
-        //Increase difficulty here
+
     }
 
     public void RestartGame()
@@ -53,10 +56,13 @@ public class GameUI : MonoBehaviour
 
         //Resets the current score saved
         PlayerPrefs.DeleteKey("CurrentScoreSaved");
-        Debug.Log(PlayerPrefs.GetInt("CurrentScoreSaved"));
+        //Resets the current level to 1
+        PlayerPrefs.SetInt("CurrentLevel", 1);
+        //Ensure current score is set to 0 on restart
         gameManagerScript.currentScore = 0;
         //Loads the current scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
     }
 
     public void GoToMainMenu()

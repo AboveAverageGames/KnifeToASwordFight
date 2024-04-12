@@ -10,6 +10,9 @@ public class EnemyAI : MonoBehaviour
 {
     private float enemyTimer;
 
+    private float goblinSpeed;
+    private float goblinSpeedIncrease;
+
     Vector3 randomDirection;
 
     private Animator animController;
@@ -46,6 +49,8 @@ public class EnemyAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+
         //Gets Animator For Enemies
         animController = GetComponentInChildren<Animator>();
 
@@ -55,6 +60,37 @@ public class EnemyAI : MonoBehaviour
         //Starts the enemies in a state of scatter
         currentState = enemyState.Scatter;
         enemyTimer = 7f;
+
+
+        //Level difficulty increase code below ------------------------------
+
+        //This reduces the enemy timer based on the current level they are at.
+        if (enemyTimer == (PlayerPrefs.GetInt("CurrentLevel")))
+        {
+            enemyTimer = 0;
+        }
+        else
+        {
+            enemyTimer = ((7) / (PlayerPrefs.GetInt("CurrentLevel")));
+        }
+        //Sets the goblin speed to the navmesh agent speed
+        goblinSpeed = GetComponent<NavMeshAgent>().speed;
+
+        //Increases the goblins speed based on what level it is (Incremented by (0.(LEVEL) then capping at a random range between 6 to 6.5 since the players speed is 7)
+        //Also random range so the goblins are varying speeds and dont stack up on eachother
+        goblinSpeedIncrease = (PlayerPrefs.GetInt("CurrentLevel") / 10f);
+        goblinSpeed = (goblinSpeed + goblinSpeedIncrease);
+        if (goblinSpeed > 6.5)
+        {
+            goblinSpeed = Random.Range(6.0f, 6.5f);
+        }
+        //Sets the navmesh speed to the goblin speed.
+        GetComponent<NavMeshAgent>().speed = goblinSpeed;
+
+        Debug.Log("Goblin speed is " + goblinSpeed);
+        Debug.Log("Goblin speed increase is " + goblinSpeedIncrease);
+        Debug.Log("Current Level is " + PlayerPrefs.GetInt("CurrentLevel"));
+        Debug.Log("Enemy speed is " + GetComponent<NavMeshAgent>().speed);
     }
 
     // Update is called once per frame
@@ -95,6 +131,8 @@ public class EnemyAI : MonoBehaviour
         {
             animController.SetBool("Home", false);
         }
+
+    
     }
 
     void Chase()
@@ -123,7 +161,16 @@ public class EnemyAI : MonoBehaviour
         if (enemyTimer <= 0)
         { 
             currentState = enemyState.Scatter;
+            //Reduces the enemy timer based on the difficulty.. It divides it by whatever level it is, If the level is higher then the scatter timer Ill set scatter timer to 0.
             enemyTimer = 7;
+            if (enemyTimer == (PlayerPrefs.GetInt("CurrentLevel")))
+            {
+                enemyTimer = 0;
+            }
+            else
+            {
+                enemyTimer =( (7 ) / (PlayerPrefs.GetInt("CurrentLevel")));
+            }
         }
     }
 

@@ -28,6 +28,8 @@ public class MainMenu : MonoBehaviour
 
         //Resets the current score saved
         PlayerPrefs.DeleteKey("CurrentScoreSaved");
+        //Resets the current Level
+        PlayerPrefs.SetInt("CurrentLevel", 1);
 
         PlayerPrefs.SetInt("CurrentScoreSaved", 0);
         //Updates the score if it already holds a value
@@ -39,6 +41,8 @@ public class MainMenu : MonoBehaviour
     {
         //Resets the current score saved
         PlayerPrefs.DeleteKey("CurrentScoreSaved");
+        //Resets the level
+        PlayerPrefs.SetInt("CurrentLevel", 1);
 
         PlayerPrefs.SetInt("CurrentScoreSaved", 0);
 
