@@ -21,8 +21,16 @@ public class MainMenu : MonoBehaviour
 
     public void Update()
     {
-        highScoreNumberText.text = (PlayerPrefs.GetInt("HighScore") + "");
+            highScoreNumberText.text = (PlayerPrefs.GetInt("HighScore") + "");
     }
+
+    
+    //Do this when clicking on high score button
+    public void updateHighScore()
+    {
+    }
+
+
     public void PlayGame()
     {
 
@@ -48,5 +56,12 @@ public class MainMenu : MonoBehaviour
 
         Application.Quit();
 
+    }
+
+    public void resetButton()
+    {
+        PlayerPrefs.DeleteKey("HighScore");
+        PlayerPrefs.SetInt("HighScore", 0);
+        highScoreNumberText.text = (PlayerPrefs.GetInt("HighScore") + "");
     }
 }

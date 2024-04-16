@@ -12,6 +12,7 @@ public class GameUI : MonoBehaviour
 
     public TMPro.TextMeshProUGUI scoreNumberText;
     public TMPro.TextMeshProUGUI highScoreNumberText;
+    public TMPro.TextMeshProUGUI hasPlayerBeatHighScoreText;
 
 
 
@@ -19,6 +20,7 @@ public class GameUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+    
 
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
 
@@ -33,8 +35,19 @@ public class GameUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (gameManagerScript.hasPlayerBeatHighScoreThisRun)
+        {
+            hasPlayerBeatHighScoreText.text = ("You DID IT! You beat the high score this time! Try again?");
+        }
+        else if (!gameManagerScript.hasPlayerBeatHighScoreThisRun)
+        {
+            hasPlayerBeatHighScoreText.text = ("You didnt manage to beat the high score this time! Try again?");
+        }
+
+        //Changing the score to their current score
         scoreNumberText.text = (gameManagerScript.currentScore + "");
 
+        //Showing what the high score is
         highScoreNumberText.text = (PlayerPrefs.GetInt("HighScore") + "");
     }
 

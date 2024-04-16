@@ -12,6 +12,8 @@ TagManager:
   - PowerUpBar
   - GameOverScreen
   - PauseScreen
+  - GoblinPrefab
+  - GhostPrefab
   layers:
   - Default
   - TransparentFX

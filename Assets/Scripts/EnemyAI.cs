@@ -8,34 +8,54 @@ using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
+
+    public GameObject ghostPrefab;
+    public GameObject goblinPrefab;
+
+    //Timer that controls transitions between states
     private float enemyTimer;
 
+    //Check for if the goblin has already been killed
+    public bool isGoblinDead;
+
+    //Speed here to increase based on level
     private float goblinSpeed;
     private float goblinSpeedIncrease;
 
-    Vector3 randomDirection;
+    //Speed when they are dead
+    private float ghostSpeed = 10f;
 
+    //Anim Controller
     private Animator animController;
 
+    //Waypoints for scatter phase
     private int currentWaypoint = 0;
 
+    //Reference to the navmesh agent
     public NavMeshAgent agent;
 
+    //reference to player
     public Transform player;
-    public Transform chasePoint; //ChasePoint that is different for each goblin.
 
+    //ChasePoint Game object that is different for each goblin.
+    public Transform chasePoint;
+
+    //Reference to game manager script
     public GameManagerScript gameManagerScript;
 
+    //Array of waypoints for scatter locations
     public Transform [] scatterLocation;
 
+    //The radius of which it can choose random points to flee too
     public int fleeRadius;
-    public int vicinityRadiusToPlayer;
 
+    //Stores the location of "Home" which it returns to when killed
     public Transform homeLocation;
 
     //Testing if chase point is on the nav mesh
     NavMeshHit hit;
 
+    //Stores the states of which it can be in
     private enemyState currentState;
     private enum enemyState
     {
@@ -64,33 +84,28 @@ public class EnemyAI : MonoBehaviour
 
         //Level difficulty increase code below ------------------------------
 
-        //This reduces the enemy timer based on the current level they are at.
-        if (enemyTimer == (PlayerPrefs.GetInt("CurrentLevel")))
+        //This reduces the starting enemy timer based on the current level they are at. if the level is past level 7 that timer is set to 0
+        if (enemyTimer <= (PlayerPrefs.GetInt("CurrentLevel")))
         {
             enemyTimer = 0;
         }
         else
         {
-            enemyTimer = ((7) / (PlayerPrefs.GetInt("CurrentLevel")));
+            enemyTimer = ((7) - (PlayerPrefs.GetInt("CurrentLevel")));
         }
         //Sets the goblin speed to the navmesh agent speed
         goblinSpeed = GetComponent<NavMeshAgent>().speed;
 
-        //Increases the goblins speed based on what level it is (Incremented by (0.(LEVEL) then capping at a random range between 6 to 6.5 since the players speed is 7)
+        //Increases the goblins speed based on what level it is (Incremented by (0.(LEVEL) then capping at a random range between 5.8 to 6.5 since the players speed is 7)
         //Also random range so the goblins are varying speeds and dont stack up on eachother
         goblinSpeedIncrease = (PlayerPrefs.GetInt("CurrentLevel") / 10f);
         goblinSpeed = (goblinSpeed + goblinSpeedIncrease);
         if (goblinSpeed > 6.5)
         {
-            goblinSpeed = Random.Range(6.0f, 6.5f);
+            goblinSpeed = Random.Range(5.8f, 6.5f);
         }
         //Sets the navmesh speed to the goblin speed.
         GetComponent<NavMeshAgent>().speed = goblinSpeed;
-
-        Debug.Log("Goblin speed is " + goblinSpeed);
-        Debug.Log("Goblin speed increase is " + goblinSpeedIncrease);
-        Debug.Log("Current Level is " + PlayerPrefs.GetInt("CurrentLevel"));
-        Debug.Log("Enemy speed is " + GetComponent<NavMeshAgent>().speed);
     }
 
     // Update is called once per frame
@@ -169,15 +184,19 @@ public class EnemyAI : MonoBehaviour
             }
             else
             {
-                enemyTimer =( (7 ) / (PlayerPrefs.GetInt("CurrentLevel")));
+                enemyTimer =( (7 ) - (PlayerPrefs.GetInt("CurrentLevel")));
             }
         }
+
     }
 
     void Scatter()
     {
+        Debug.Log("The current level is " + PlayerPrefs.GetInt("CurrentLevel"));
+        Debug.Log("Scatter timer is " + enemyTimer);
+
         //Changes destination to the current waypoint inside the scatter location Array
-     agent.SetDestination(scatterLocation[currentWaypoint].position);
+        agent.SetDestination(scatterLocation[currentWaypoint].position);
 
         //Changes the waypoint when they reach one. Adds +1 to the Array of waypoints once they reach one, resets back to 0 and the end of the patrol.
         if (Vector3.Distance(transform.position, scatterLocation[currentWaypoint].position) < 1f)
@@ -196,7 +215,7 @@ public class EnemyAI : MonoBehaviour
 
     }
 
-
+    // Finds random points that are on the nav mesh
     bool RandomPoint(Vector3 center, float fleeRadius, out Vector3 result)
     {
         for (int i = 0; i < 30; i++)
@@ -249,11 +268,27 @@ public class EnemyAI : MonoBehaviour
         //checks if the AI has made it back to home
         if (Vector3.Distance(transform.position, homeLocation.position) <= 1 && gameManagerScript.doesPlayerHaveSword == false)
         {
+            isGoblinDead = false;
+            //Make Ghost prefab invis and goblin Prefab Vis
+            goblinPrefab.SetActive(true);
+            ghostPrefab.SetActive(false);
+
+            //Returns to normal speed
+            GetComponent<NavMeshAgent>().speed = goblinSpeed;
+
             currentState = enemyState.Chase;
             enemyTimer = 20;
         }
+        //Returns to normal state if player runs out of sword power up
         else if (gameManagerScript.doesPlayerHaveSword == false)
         {
+            isGoblinDead = false;
+            //Make Ghost prefab invis and goblin Prefab Vis
+            goblinPrefab.SetActive(true);
+            ghostPrefab.SetActive(false);
+            //Returns to normal speed
+            GetComponent<NavMeshAgent>().speed = goblinSpeed;
+
             //after reaching home Scatter
             currentState = enemyState.Chase;
             enemyTimer = 20;
@@ -265,6 +300,14 @@ public class EnemyAI : MonoBehaviour
         //Checking if it colliding with the player and if they have a sword
         if (collision.gameObject.CompareTag("Player") && gameManagerScript.doesPlayerHaveSword)
         {
+            isGoblinDead = true;
+            //Make Ghost prefab vis and goblin Prefab invis
+            goblinPrefab.SetActive(false);
+            ghostPrefab.SetActive(true);
+
+            //Changes speed to ghost speed (Faster to return home)
+            GetComponent<NavMeshAgent>().speed = ghostSpeed;
+
             enemyTimer = 5.0f;
             currentState = enemyState.ReturnHome;
         }

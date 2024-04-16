@@ -26,12 +26,18 @@ public class Collectibles : MonoBehaviour
     {
         //If Coin collides with player then it is destroyed + Updates the Score in the GameManagerScript
         if (collision.gameObject.CompareTag("Player"))
-            {
+        {
             //Plays SFX On collection
             audioManager.PlaySFX(audioManager.coinCollection);
 
-            gameManagerScript.totalCoinsCollected++;
-            Destroy(gameObject);
+            //Updates the coin on game manager script if collectible is a coin
+            if (gameObject.tag == "Coin")
+            {
+                gameManagerScript.totalCoinsCollected++;
+            }
+
+            //De activating object instead of destroying for object pooling
+            gameObject.SetActive(false);
             gameManagerScript.UpdateScore(pointsItemIsWorth);
             
         }
@@ -42,6 +48,5 @@ public class Collectibles : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
     }
 }

@@ -33,6 +33,8 @@ public class PlayerController : MonoBehaviour
     //Accessing the game manager script
     public GameManagerScript gameManagerScript;
 
+    public EnemyAI enemyAI;
+
 
     // Pauses or Unpauses the game using the new input action
     public void Pause(InputAction.CallbackContext context)
@@ -59,6 +61,15 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Gets the game manager script access for the variable
+        gameManagerScript = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerScript>();
+
+        //Gets audio manager
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+
+        //Gets player animator
+        animController = GetComponentInChildren<Animator>();
+
 
         //Initalises the game being over as false
         gameOver = false;
@@ -74,15 +85,7 @@ public class PlayerController : MonoBehaviour
         swordAttatchedToPlayer = GameObject.FindWithTag("SwordInHand");
         swordAttatchedToPlayer.SetActive(false);
 
-        //Gets the game manager script access for the variable
-        gameManagerScript = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManagerScript>();
-
-        //Gets audio manager
-        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
-
-
-        //Gets player animator
-        animController = GetComponentInChildren<Animator>();
+       
     }
 
     //Move Player
@@ -195,10 +198,18 @@ public class PlayerController : MonoBehaviour
         }
 
         //Handles Animation if they collide with enemy and have sword
-        if (collision.gameObject.CompareTag("Enemy") && gameManagerScript.doesPlayerHaveSword == true && !isPlayerDead)
+        //Checks if it collides with the enemy. If the player has a sword. The player is not dead. And if the enemy it is colliding with is not ALREADY dead (To avoid spamming for points)
+        if (collision.gameObject.CompareTag("Enemy") && gameManagerScript.doesPlayerHaveSword == true && !isPlayerDead && collision.gameObject.GetComponent<EnemyAI>().isGoblinDead == false)
         {
+            //Plays death sound
+            audioManager.PlaySFX(audioManager.enemyDeathSound);
+
+            //Plays a spin attack
             animController.SetBool("AttackAnimHasPlayed", false);
             animController.Play("Attack04_SwordAndShield");
+
+            //Adds 100 points for killing a goblin
+            gameManagerScript.currentScore = gameManagerScript.currentScore + 100;
         }
 
     }

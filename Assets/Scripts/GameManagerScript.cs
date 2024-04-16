@@ -9,8 +9,9 @@ public class GameManagerScript : MonoBehaviour
     public int currentScore;
     public GameObject GameOverScreen;
     public GameObject LevelCompleteScreen;
+    public bool hasPlayerBeatHighScoreThisRun;
 
-    PlayerController playerController;
+   PlayerController playerController;
 
     public bool doesPlayerHaveSword;
 
@@ -20,6 +21,7 @@ public class GameManagerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         currentScore = 0;  
 
         //Makes sure the game is not paused
@@ -30,7 +32,6 @@ public class GameManagerScript : MonoBehaviour
 
         //Gets Reference to player controller script
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-
 
     }
 
@@ -55,7 +56,11 @@ public class GameManagerScript : MonoBehaviour
         //Updates high score if current score is higher then highscore
         if (currentScore > PlayerPrefs.GetInt("HighScore", 0))
         {
+            //Sets a bool that can be accessed via the GAME UI to display if the player beat the high score on this run!
+            hasPlayerBeatHighScoreThisRun = true;
+
             PlayerPrefs.SetInt("HighScore", currentScore);
+
 
         }
     }
