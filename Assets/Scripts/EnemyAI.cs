@@ -215,7 +215,7 @@ public class EnemyAI : MonoBehaviour
 
     }
 
-    // Finds random points that are on the nav mesh
+    // Finds random points that are on the nav mesh for the flee state
     bool RandomPoint(Vector3 center, float fleeRadius, out Vector3 result)
     {
         for (int i = 0; i < 30; i++)
@@ -234,7 +234,7 @@ public class EnemyAI : MonoBehaviour
 
     void Flee()
     {
-
+        //Random points found on navmesh for fleeing state
         Vector3 point;
         if (RandomPoint(transform.position, fleeRadius, out point))
         {
